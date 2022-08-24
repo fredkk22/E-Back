@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Tag, Product } = require('../../models');
+const { Tag, Product, ProductTag } = require('../../models');
 
 // The `/api/tags` endpoint
 
@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
   // be sure to include its associated Product data
   try {
     const allTags = await Tag.findAll({
-      include: [{ model: Product }]
+      include: [{ model: Product, through: ProductTag }]
     });
 
     res.status(200).json(allTags);
@@ -22,7 +22,7 @@ router.get('/:id', async (req, res) => {
   // be sure to include its associated Product data
   try {
     const tagByID = await Tag.findByPk(req.params.id, {
-      include: [{ model: Product }]
+      include: [{ model: Product, through: ProductTag }]
     })
 
     if (!tagByID) {
@@ -39,9 +39,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   // create a new tag
   try {
-    const newTag = await Tag.create({
-      tag_name: req.body.tag_name
-    });
+    const newTag = await Tag.create(req.body);
 
     res.status(200).json(newTag);
   } catch (err) {
