@@ -1,4 +1,4 @@
-# E-Commerce Back-End
+# E-Back
 
 ## Table of Contents
   - [Description](#description)
